@@ -11,11 +11,19 @@ Le site pour la SAE 3.01 (front) et 3.03(back), qui sera le site des MMI DAY de 
 * **/functions** regroupe les fonctions back (une fonction = un fichier) (dev back)
 * **/public** permet de stocker les média sauvegarder dans la bdd (dev back)
 
-# 
 
 ## Infos fichiers 
 
 Les fichiers front doivent etre en .php et dans le dossier racine du projet
 
 
+## Infos code
+### Ajouter un popup de connexion a une action
+// Pour un seul élément
+document.getElementById("myButton").addEventListener("click", requireAuth);
+
+// Ou pour plusieurs éléments
+document.querySelectorAll(".protected-feature").forEach(element => {
+  element.addEventListener("click", requireAuth);
+});
 

@@ -1,13 +1,13 @@
 <?php
-$username = 'root';
-$pass = '';
-$host = 'localhost';
-$name = 'sc2toje9146_jpo_mmi';
-
-// $username = 'sc2toje9146';
-// $pass = 'Sae!@MmiToulon';
+// $username = 'root';
+// $pass = '';
 // $host = 'localhost';
 // $name = 'sc2toje9146_jpo_mmi';
+
+$username = 'sc2toje9146';
+$pass = 'Sae!@MmiToulon';
+$host = 'localhost';
+$name = 'sc2toje9146_jpo_mmi';
 
 
 try {
