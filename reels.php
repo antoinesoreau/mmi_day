@@ -1,8 +1,9 @@
 <?php 
-require_once 'config/config.php'; 
+session_start();
+require_once 'config/database.php'; 
 require_once 'functions/functions-reel.php'; 
 
-$reels = obtenirReelsAleatoires($db);
+$reels = obtenirReelsAleatoires($dtb);
 $user_id = $_SESSION['user_id'] ?? null;
 ?>
 <!DOCTYPE html>
@@ -33,7 +34,7 @@ $user_id = $_SESSION['user_id'] ?? null;
                 <div class="reel-block" id="projet_<?= $r['id_projet'] ?>">
                     <?php 
                     $fileName = $r['projet_media_fixe'];
-                    $filePath = "assets/img/" . $fileName; 
+                    $filePath = "public/" . $fileName; 
                     $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
                     ?>
 
@@ -55,10 +56,10 @@ $user_id = $_SESSION['user_id'] ?? null;
                             <input type="hidden" name="coeur" value="1">
                             <button type="button" class="btn-like-reel" 
                                     onclick="verifierConnexion(<?= $user_id ? 'true' : 'false' ?>, this.form)">
-                                <?= userHasLiked($db, $user_id, $r['id_projet']) ? "❤️" : "🤍" ?>
+                                <?= userHasLiked($dtb, $user_id, $r['id_projet']) ? "❤️" : "🤍" ?>
                             </button>
                         </form>
-                        <span class="compteur"><?= getLikeCount($db, $r['id_projet']) ?></span>
+                        <span class="compteur"><?= getLikeCount($dtb, $r['id_projet']) ?></span>
                     </div>
                 </div>
             <?php endforeach; ?>
