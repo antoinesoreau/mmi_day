@@ -1,0 +1,304 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", Arial, sans-serif;
+    background-color: #fff;
+    color: #000;
+}
+
+/* HEADER */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: #fff;
+}
+
+.logo-placeholder {
+    font-weight: 900;
+    font-size: 1.5rem;
+    line-height: 1;
+    text-transform: uppercase;
+    color: #555;
+}
+
+.logo-placeholder small {
+    display: block;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+}
+
+.menu-btn {
+    background-color: #dcdcdc;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* HERO SECTION */
+.hero-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fff;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+/* --- NOUVEAU STYLE SELECTEUR DE FILTRE --- */
+.filter-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.select-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px; /* Largeur max du select */
+}
+
+#filterSelect {
+    width: 100%;
+    appearance: none; /* Enlève le style par défaut du navigateur */
+    -webkit-appearance: none;
+    background-color: #f0f0f0;
+    border: 1px solid #000;
+    padding: 12px 20px;
+    border-radius: 30px; /* Très arrondi */
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    text-align: left; /* Texte aligné à gauche */
+    color: #000;
+}
+
+#filterSelect:hover {
+    background-color: #e6e6e6;
+}
+
+/* La petite icône flèche */
+.select-arrow {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Pour que le clic passe à travers vers le select */
+    color: #000;
+    font-size: 0.9rem;
+}
+
+/* FAQ ACCORDION */
+.faq-container {
+    width: 100%;
+    border-top: 2px solid #000;
+    min-height: 300px;
+}
+
+.faq-item {
+    background-color: #e0e0e0;
+    border-bottom: 1px solid #000;
+    overflow: hidden;
+}
+
+.faq-header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.faq-header:hover {
+    background-color: #d0d0d0;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.category-tag {
+    font-size: 0.7rem;
+    font-weight: 900;
+    color: #666;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+
+.faq-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.faq-icon {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-left: 20px;
+}
+
+.faq-icon::before,
+.faq-icon::after {
+    content: "";
+    position: absolute;
+    background-color: #000;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s;
+}
+
+.faq-icon::before {
+    width: 20px;
+    height: 3px;
+}
+.faq-icon::after {
+    width: 3px;
+    height: 20px;
+}
+
+.faq-item.active .faq-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.faq-item.active {
+    background-color: #d6d6d6;
+}
+
+.faq-content {
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s ease-out;
+    padding: 0 40px;
+}
+
+.faq-item.active .faq-content {
+    max-height: 1000px;
+    opacity: 1;
+    padding-bottom: 30px;
+}
+
+.content-wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.text-part {
+    flex: 2;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.image-part {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.image-placeholder {
+    width: 150px;
+    height: 150px;
+    background-color: #777;
+    position: relative;
+    border: 1px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #000;
+    font-size: 0.7rem;
+    padding: 10px;
+}
+
+.image-placeholder::before,
+.image-placeholder::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.image-placeholder::before {
+    background: linear-gradient(
+        to top right,
+        transparent calc(50% - 1px),
+        #fff,
+        transparent calc(50% + 1px)
+    );
+}
+.image-placeholder::after {
+    background: linear-gradient(
+        to bottom right,
+        transparent calc(50% - 1px),
+        #fff,
+        transparent calc(50% + 1px)
+    );
+}
+
+/* FOOTER */
+.footer-cta {
+    background-color: #dcdcdc;
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 2px solid #000;
+}
+
+.footer-cta h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.cta-btn {
+    background-color: #777;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+    .image-part {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    .faq-header {
+        padding: 15px 20px;
+    }
+}
