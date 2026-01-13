@@ -6,10 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="inscription">inscription</a><br>
-    <a href="Test">inscription popup test</a>
+    <a href="auth">inscription</a><br>
     
     <br><a href="faq">faq</a><br>
-    <a href="reels">reels</a>
+    <a href="reels">reels</a><br>
+    <a href="config/logout">logout</a>
 </body>
 </html>

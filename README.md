@@ -19,11 +19,8 @@ Les fichiers front doivent etre en .php et dans le dossier racine du projet
 
 ## Infos code
 ### Ajouter un popup de connexion a une action
-// Pour un seul élément
-document.getElementById("myButton").addEventListener("click", requireAuth);
+Ajouter la class **open-auth** a l'élément (ex: bouton de connexion, like une video en non connecter...)
+<div class="open-auth" ></div>
 
-// Ou pour plusieurs éléments
-document.querySelectorAll(".protected-feature").forEach(element => {
-  element.addEventListener("click", requireAuth);
-});
+Pour forcer l'affichage du popup ajouter <div id="auth-popup-auto-open" style="display:none;"></div> sur la page
 

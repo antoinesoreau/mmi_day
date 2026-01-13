@@ -1,1 +1,0 @@
-<!-- Les fonctions de traitement du formulaire -->
