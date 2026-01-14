@@ -24,3 +24,5 @@ Ajouter la class **open-auth** a l'élément (ex: bouton de connexion, like une 
 
 Pour forcer l'affichage du popup ajouter <div id="auth-popup-auto-open" style="display:none;"></div> sur la page
 
+### Utilisateur connecte
+if (isset($_SESSION['email']))
