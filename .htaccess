@@ -11,7 +11,7 @@ RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L]
 
 # Gestion 404
-ErrorDocument 404 'http://mmiday.mmi-toulon.fr/config/404.php'
+ErrorDocument 404 'https://mmiday.mmi-toulon.fr/config/404.php'
 
 <Files "404.php">
     ErrorDocument 404 default

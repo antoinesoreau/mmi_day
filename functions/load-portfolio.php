@@ -1,6 +1,6 @@
 <?php
 
-require_once 'count-like.php';
+require_once __DIR__ . '/count-like.php';
 
 /**
  * Charge les projets avec métadonnées, likes et statut favori.
@@ -10,66 +10,69 @@ require_once 'count-like.php';
  * @param int|null $user_id ID utilisateur (null = non connecté)
  * @return array Réponse JSON-compatible
  */
-function loadPortfolio(int $row, ?string $filter, ?int $user_id): array {
+function loadPortfolio($row, $filter, $user_id) {
     global $dtb;
 
-    // Sécurité : limiter le nombre de résultats
-    $row = max(1, min($row, 100));
+    if (!isset($dtb)) {
+        return ['status_code' => 'error', 'message' => 'BDD non initialisée'];
+    }
 
-    // Construire la requête SQL
+    $row = (int) max(1, min((int)$row, 100));
+    $params = [];
+
     $sql = "SELECT id_projet, pole, projet_titre, projet_description, projet_media_fixe FROM projet";
+
     if ($filter !== null && $filter !== 'NULL') {
         $sql .= " WHERE pole = ?";
-    }
-    $sql .= " ORDER BY id_projet LIMIT ?";
-
-    // Préparer la requête
-    $stmt = $dtb->prepare($sql);
-
-    // Lier les paramètres avec les bons types
-    if ($filter !== null && $filter !== 'NULL') {
-        $stmt->bindValue(1, $filter, PDO::PARAM_STR);
-        $stmt->bindValue(2, $row, PDO::PARAM_INT);
-    } else {
-        $stmt->bindValue(1, $row, PDO::PARAM_INT);
+        $params[] = $filter;
     }
 
-    // Exécuter
-    $stmt->execute();
-    $projets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $sql .= " ORDER BY id_projet LIMIT " . $row; // ← pas de ?
 
-    // Construire la réponse
-    $projects = [];
+    try {
+        $stmt = $dtb->prepare($sql);
+        $stmt->execute($params);
+        $projets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($projets as $p) {
-        $id = (int) $p['id_projet'];
-
-        // Vérifier si c'est un favori (seulement si utilisateur connecté)
-        $is_fav = false;
-        if ($user_id !== null) {
-            $favStmt = $dtb->prepare("SELECT 1 FROM user_like WHERE id_user = ? AND id_projet = ? AND statut = 1");
-            $favStmt->execute([$user_id, $id]);
-            $is_fav = (bool) $favStmt->fetch();
+        if ($projets === false) {
+            throw new Exception("Échec fetchAll");
         }
 
-        // Compter les likes
-        $number_like = countLike($dtb, $id);
+        $projects = [];
+        foreach ($projets as $p) {
+            $id = (int)($p['id_projet'] ?? 0);
+            if ($id <= 0) continue;
 
-        // Ajouter au tableau avec clé = id du projet
-        $projects[$id] = [
-            'pole' => $p['pole'],
-            'title' => $p['projet_titre'],
-            'url' => $p['projet_media_fixe'],
-            'description' => $p['projet_description'],
-            'is_fav' => $is_fav,
-            'number_like' => $number_like
-        ];
+            $is_fav = false;
+            if ($user_id !== null) {
+                $fav = $dtb->prepare("SELECT 1 FROM user_like WHERE id_user = ? AND id_projet = ? AND statut = 1");
+                if ($fav && $fav->execute([$user_id, $id])) {
+                    $is_fav = (bool) $fav->fetch();
+                }
+            }
+
+            $number_like = 0;
+            try {
+                $number_like = countLike($id);
+            } catch (Exception $e) {
+                // ignore
+            }
+
+            $projects[$id] = [
+                'pole' => $p['pole'] ?? '',
+                'title' => $p['projet_titre'] ?? '',
+                'url' => $p['projet_media_fixe'] ?? '',
+                'description' => $p['projet_description'] ?? '',
+                'is_fav' => $is_fav,
+                'number_like' => $number_like
+            ];
+        }
+
+        return ['status_code' => 'success', 'data' => ['projects' => $projects]];
+
+    } catch (Throwable $e) {
+        // Log détaillé
+        file_put_contents(__DIR__ . '/debug.log', date('c') . ' - ' . $e->getMessage() . "\nSQL: $sql\nParams: " . json_encode($params) . "\n", FILE_APPEND);
+        return ['status_code' => 'error', 'message' => 'Erreur portfolio'];
     }
-
-    return [
-        'status_code' => 'success',
-        'data' => [
-            'projects' => $projects
-        ]
-    ];
 }

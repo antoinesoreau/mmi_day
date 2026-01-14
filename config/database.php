@@ -11,7 +11,7 @@ $name = 'sc2toje9146_jpo_mmi';
 
 
 try {
-    $dtb = new PDO('mysql:host='.$host.':3306;dbname='.$name.';charset=utf8mb4', $username, $pass);
+    $dtb = new PDO('mysql:host='.$host.';dbname='.$name.';charset=utf8mb4', $username, $pass);
 } catch (Exception $e) {
     die('Erreur : ' . $e->getMessage());
 }
