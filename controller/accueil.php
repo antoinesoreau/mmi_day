@@ -2,11 +2,11 @@
 header('Content-Type: application/json');
 
 require '../config/database.php'; // Connexion à la base de données
-require 'functions/nb_compte.php'; // fichier pour le nombre d'inscrits
-require 'functions/fonction_accueil.php'; // fichier pour le contenu d'accueil
+require '../functions/nb_compte.php'; // fichier pour le nombre d'inscrits
+require '../functions/fonction_accueil.php'; // fichier pour le contenu d'accueil
+require '../functions/add-like-stand.php';
+require '../functions/remove-like-stand.php';
 
-
-// IMPORTANT : on a changé map pour stand pour que ça colle plus à la bdd
 
 // 1. On récupère le contenu brut de la requête (le flux php://input)
 $json_data = file_get_contents('php://input');
@@ -16,20 +16,18 @@ $data = json_decode($json_data, true); // "true" pour avoir un tableau associati
 
 // 3. On vérifie si la donnée existe et on transforme
 // un objet ou un tableau PHP en JSON et on l'envoie en méthode POST en cas de succès
+
+////////////////////////////////////////////////////////////////
+// Charger les données quand l'utilisateur n'est pas connecté //
+////////////////////////////////////////////////////////////////
 if (isset($data['function']) && ($data['function'] == 'load')){
     $received = $data['function'];
 
-    if (isset($data['intro']) && isset($data['stand'])) {
-        $intro = $data['intro'];
-        $stand = $data['stand'];
+    if (in_array('intro', $data['data']) && in_array('stand', $data['data'])) {
+        $intro = 'intro';
+        $stand = 'stand';
 
-        $video_intro = [
-            "id" => isset($intro['id']) ? (int)$intro['id'] : null,
-            "url" => isset($intro['url']) ? $intro['url'] : "",
-            "title" => isset($intro['title']) ? $intro['title'] : "",
-            "description" => isset($intro['description']) ? $intro['description'] : "",
-            "button" => isset($intro['button']) ? $intro['button'] : ""
-        ];
+        $video_intro = getAccueil();
 
         $video_stand = [];
         if (is_array($stand)) {
@@ -79,22 +77,20 @@ if (isset($data['function']) && ($data['function'] == 'load')){
 
     else {
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Données JSON invalides ou manquantes."]);
+        echo json_encode(["status" => "error", "message" => "Données JSON invalides ou manquantes 3."]);
     }
 }
-
+///////////////////////////////////////////////////////////
+// Charger les données quand l'utilisateur est connecté //
+/////////////////////////////////////////////////////////
 elseif (isset($data['function']) && ($data['function'] == 'load_connected')){
     $received = $data['function'];
 
-    if (isset($data['intro']) && isset($data['stand'])) {
-        $intro = $data['intro'];
-        $stand = $data['stand'];
+    if (in_array('intro', $data['data']) && in_array('stand', $data['data'])) {
+        $intro = 'intro';
+        $stand = 'stand';
 
-        $video_intro = [
-            "id" => isset($intro['id']) ? (int)$intro['id'] : null,
-            "url" => isset($intro['url']) ? $intro['url'] : "",
-            "description" => isset($intro['description']) ? $intro['description'] : "",
-        ];
+        $video_intro = getAccueil();
 
         $video_stand = [];
         if (is_array($stand)) {
@@ -145,38 +141,46 @@ elseif (isset($data['function']) && ($data['function'] == 'load_connected')){
 
         echo json_encode($response);
     }
-
+    
+    ////////////////////////////
+    // Si rien ne fonctionne //
+    //////////////////////////
     else {
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Données JSON invalides ou manquantes."]);
+        echo json_encode(["status" => "error", "message" => "Données JSON invalides ou manquantes. 4"]);
     }
 
 }
 
+//////////////////////////////////////
+// Route ajout d'un lieu en favori //
+////////////////////////////////////
 elseif (isset($data['function']) && ($data['function'] == 'add_place_fav')){
-    $received = $data['function'];
-
-    if (isset($data['add_place_fav'])) {
-        $add_place_fav = $data['add_place_fav'];
-
-        $response = [
-            "status_code" => "success",
-            "received_via" => "JSON Payload",
-            "message" => "Serveur dit : " . $received,
-            "add_place_fav" => $add_place_fav,
-        ];
-
+    if (isset($data['data']['user_id']) && isset($data['data']['place_id'])){
+        $response = addLikeStand($data['data']['user_id'], $data['data']['place_id']);
         echo json_encode($response);
     }
-
-    else {
+    else{
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Données JSON invalides ou manquantes."]);
+    echo json_encode(["status" => "error", "message" => "Vous tentez d'ajouter un lieu en favoris mais les données sont invalides"]);
+    }
+}
+/////////////////////////////////////////
+// Route suppression d'un lieu favori //
+///////////////////////////////////////
+elseif (isset($data['function']) && ($data['function'] == 'remove_place_fav')){
+    if (isset($data['data']['user_id']) && isset($data['data']['place_id'])){
+        $response = removeLikeStand($data['data']['user_id'], $data['data']['place_id']);
+        echo json_encode($response);
+    }
+    else{
+        http_response_code(400);
+        echo json_encode(["status" => "error", "message" => "Vous tentez dz supprimer un lieu favoris mais les données sont invalides"]);
     }
 }
 
 else {
     http_response_code(400);
-    echo json_encode(["status" => "error", "message" => "Données JSON invalides ou manquantes."]);
+    echo json_encode(["status" => "error", "message" => "Données JSON invalides ou manquantes 1."]);
 }
 ?>
