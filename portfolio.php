@@ -15,9 +15,6 @@ if (isset($_SESSION['id'])) {
 <body>
 
 <h1>Projets du JPO MMI</h1>
-<pre>
-  <?php print_r($_SESSION); ?>
-</pre>
 
 <!-- Filtres -->
 <div>
@@ -47,6 +44,6 @@ if (isset($_SESSION['id'])) {
 
 <!-- Chargement du script externe -->
 <script src="assets/js/portfolio.js"></script>
-
+<?php require 'assets/components/popup_auth.php'; ?>
 </body>
 </html>

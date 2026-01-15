@@ -61,7 +61,8 @@ function handleLikeClick(event) {
 
   // Double sécurité (ne devrait pas arriver si bien configuré)
   if (userId === null) {
-    alert("Veuillez vous connecter pour liker un projet.");
+    // alert("Veuillez vous connecter pour liker un projet.");
+    document.getElementById("auth-popup").style.display = 'block';
     return;
   }
 
@@ -203,8 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('click', (e) => {
     if (e.target.closest('.open-auth')) {
       e.preventDefault();
-      alert("Veuillez vous connecter pour liker un projet.");
+      // alert("Veuillez vous connecter pour liker un projet.");
       // Ici, tu peux aussi ouvrir une modale de login
+      document.getElementById("auth-popup").style.display = 'block';
     }
   });
 
