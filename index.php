@@ -19,7 +19,13 @@ error_reporting(E_ALL);
     <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
-    <header><?php // require 'vue/menu.php' ?></header>
+    <header>
+        <?php include 'vue/menu.php'; ?>
+        <a href="auth">inscription</a><br>
+        <a href="faq">faq</a><br>
+        <a href="portfolio">reels</a><br>
+        <a href="config/logout">logout</a>
+    </header>
 
     <!-- SECTION 1 : Header avec vidéo d'introduction -->
     <section id="header">

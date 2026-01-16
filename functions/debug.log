@@ -1,0 +1,15 @@
+2026-01-14T19:13:03+01:00 - SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sc2toje9146_jpo_mmi.user_like' doesn't exist
+SQL: SELECT id_projet, pole, projet_titre, projet_description, projet_media_fixe FROM projet ORDER BY id_projet LIMIT 4
+Params: []
+2026-01-14T19:13:04+01:00 - SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sc2toje9146_jpo_mmi.user_like' doesn't exist
+SQL: SELECT id_projet, pole, projet_titre, projet_description, projet_media_fixe FROM projet ORDER BY id_projet LIMIT 4
+Params: []
+2026-01-14T19:13:04+01:00 - SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sc2toje9146_jpo_mmi.user_like' doesn't exist
+SQL: SELECT id_projet, pole, projet_titre, projet_description, projet_media_fixe FROM projet ORDER BY id_projet LIMIT 4
+Params: []
+2026-01-14T19:15:49+01:00 - SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sc2toje9146_jpo_mmi.user_like' doesn't exist
+SQL: SELECT id_projet, pole, projet_titre, projet_description, projet_media_fixe FROM projet ORDER BY id_projet LIMIT 4
+Params: []
+2026-01-14T19:26:49+01:00 - SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sc2toje9146_jpo_mmi.user_like' doesn't exist
+SQL: SELECT id_projet, pole, projet_titre, projet_description, projet_media_fixe FROM projet ORDER BY id_projet LIMIT 4
+Params: []

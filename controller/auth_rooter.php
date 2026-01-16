@@ -28,6 +28,25 @@ $function = $data['function'];
 $email = trim($data['data']['email']);
 $password = $data['data']['password'];
 
+// Validation basique de l'email
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    echo json_encode([
+        'status_code' => 'error',
+        'message' => 'Format d’email invalide'
+    ]);
+    exit;
+}
+
+// Mot de passe trop court ? (optionnel mais recommandé)
+if (strlen($password) < 6) {
+    http_response_code(400);
+    echo json_encode([
+        'status_code' => 'error',
+        'message' => 'Le mot de passe doit contenir au moins 6 caractères'
+    ]);
+    exit;
+}
 
 // Appel dynamique
 switch ($function) {

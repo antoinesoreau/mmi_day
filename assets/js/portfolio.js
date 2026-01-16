@@ -1,3 +1,5 @@
+// assets/js/portfolio.js
+
 // Configuration depuis PHP
 const BASE_URL = window.APP_CONFIG.baseUrl;
 let currentRow = 4;
@@ -59,12 +61,18 @@ function handleLikeClick(event) {
   const button = event.currentTarget;
   const projectId = parseInt(button.dataset.projectId, 10);
 
-  // Double sécurité (ne devrait pas arriver si bien configuré)
+  // --- CORRECTION MAJEURE ICI ---
+  // 1. Si l'utilisateur n'est pas connecté, on ouvre la modale et on s'arrête là.
   if (userId === null) {
-    // alert("Veuillez vous connecter pour liker un projet.");
-    document.getElementById("auth-popup").style.display = 'block';
-    return;
+    const modal = document.getElementById('auth-popup');
+    if (modal) {
+        modal.style.display = 'block';
+    } else {
+        console.error("Erreur : La modale #auth-popup est introuvable.");
+    }
+    return; // On stoppe la fonction, pas de requête Ajax envoyée
   }
+  // -----------------------------
 
   const isCurrentlyLiked = button.classList.contains('liked');
   const newLikeState = !isCurrentlyLiked; // true = on va liker, false = on va annuler
@@ -77,7 +85,7 @@ function handleLikeClick(event) {
     }
   };
 
-  // Indicateur visuel de chargement (optionnel)
+  // Indicateur visuel de chargement
   button.disabled = true;
   const originalHTML = button.innerHTML;
   button.innerHTML = '🔄';
@@ -98,12 +106,11 @@ function handleLikeClick(event) {
       } else {
         alert('Erreur : ' + (result.message || 'Impossible de mettre à jour le like.'));
         // Restaurer l'état précédent en cas d'erreur
-        updateLikeButton(button, isCurrentlyLiked, /* on ne connaît pas l'ancien compteur exact → on garde visuel actuel */);
+        updateLikeButton(button, isCurrentlyLiked, parseInt(originalHTML.match(/\d+/)[0])); 
       }
     })
     .catch(err => {
       console.error('Erreur AJAX like:', err);
-      alert('Une erreur est survenue lors du like.');
       // Restaurer l'état visuel
       button.innerHTML = originalHTML;
     })
@@ -133,10 +140,6 @@ function loadProjects(reset = true) {
       filters: currentFilter
     }
   };
-
-  // ⚠️ On n'envoie PAS user_id ici non plus — le serveur doit utiliser $_SESSION['id']
-  // Donc on retire cette ligne :
-  // if (userId !== null) { payload.data.user_id = userId; }
 
   fetch(BASE_URL, {
     method: 'POST',
@@ -170,12 +173,11 @@ function loadProjects(reset = true) {
           likeBtn.className = 'like-btn';
           likeBtn.dataset.projectId = id;
 
-          if (userId === null) {
-            likeBtn.classList.add('open-auth');
-            // Pas d'écouteur → clic géré globalement ou via CSS/modal
-          } else {
-            likeBtn.addEventListener('click', handleLikeClick);
-          }
+          // --- CORRECTION ICI ---
+          // On attache handleLikeClick pour TOUT LE MONDE.
+          // C'est handleLikeClick qui vérifiera si on est connecté ou non.
+          likeBtn.addEventListener('click', handleLikeClick);
+          // ----------------------
 
           updateLikeButton(likeBtn, isLiked, likeCount);
 
@@ -185,7 +187,10 @@ function loadProjects(reset = true) {
             <div class="media-container">${renderMedia(p.url, p.title)}</div>
             <div class="actions"></div>
           `;
+          
+          // On insère le bouton qu'on vient de créer et configurer
           div.querySelector('.actions').appendChild(likeBtn);
+          
           container.appendChild(div);
         }
       } else {
@@ -200,13 +205,13 @@ function loadProjects(reset = true) {
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
-  // Gestion globale des clics sur .open-auth (optionnel)
+  
+  // Gestion globale pour les autres boutons .open-auth du site (ex: dans auth.php)
   document.body.addEventListener('click', (e) => {
     if (e.target.closest('.open-auth')) {
       e.preventDefault();
-      // alert("Veuillez vous connecter pour liker un projet.");
-      // Ici, tu peux aussi ouvrir une modale de login
-      document.getElementById("auth-popup").style.display = 'block';
+      const modal = document.getElementById("auth-popup");
+      if(modal) modal.style.display = 'block';
     }
   });
 

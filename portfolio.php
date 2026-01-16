@@ -1,4 +1,8 @@
-<?php session_start(); 
+<?php 
+// portfolio.php
+session_start(); 
+
+// --- HARMONISATION : On lit la session 'id' ---
 if (isset($_SESSION['id'])) {
     $user_id = (int)$_SESSION['id'];
 } else {
@@ -11,30 +15,32 @@ if (isset($_SESSION['id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Portfolio Projets</title>
+  <link rel="stylesheet" href="assets/css/navbar.css">
 </head>
 <body>
 
-<h1>Projets du JPO MMI</h1>
+<header>
+    <?php include 'vue/menu.php'; ?>
+</header>
 
-<!-- Filtres -->
-<div>
-  <label for="filter-select">Filtrer par pôle :</label>
-  <select id="filter-select">
-    <option value="NULL">Tous les pôles</option>
-    <option value="DEVELOPPEMENT">Développement</option>
-    <option value="CREATION">Création</option>
-    <option value="COMMUNICATION">Communication</option>
-  </select>
-  <button id="apply-filter">Appliquer</button>
-</div>
+<main style="padding:20px;">
+    <h1>Projets du JPO MMI</h1>
 
-<!-- Zone d'affichage des projets -->
-<div id="projects-container"></div>
+    <div>
+      <label for="filter-select">Filtrer par pôle :</label>
+      <select id="filter-select">
+        <option value="NULL">Tous les pôles</option>
+        <option value="DEVELOPPEMENT">Développement</option>
+        <option value="CREATION">Création</option>
+        <option value="COMMUNICATION">Communication</option>
+      </select>
+      <button id="apply-filter">Appliquer</button>
+    </div>
 
-<!-- Bouton "Charger plus" -->
-<button id="load-more">Charger plus</button>
+    <div id="projects-container"></div>
+    <button id="load-more">Charger plus</button>
+</main>
 
-<!-- Injection sécurisée de l'ID utilisateur dans une variable globale JS -->
 <script>
   window.APP_CONFIG = {
     userId: <?= json_encode($user_id) ?>,
@@ -42,8 +48,9 @@ if (isset($_SESSION['id'])) {
   };
 </script>
 
-<!-- Chargement du script externe -->
 <script src="assets/js/portfolio.js"></script>
+
 <?php require 'assets/components/popup_auth.php'; ?>
+
 </body>
 </html>

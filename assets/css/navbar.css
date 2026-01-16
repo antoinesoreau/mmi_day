@@ -1,0 +1,223 @@
+/* assets/css/navbar.css */
+
+/* --- 1. CONFIGURATION GLOBALE & RESET --- */
+body { 
+    font-family: 'Montserrat', sans-serif; 
+    background: #eee; 
+    margin: 0; 
+    padding: 20px; /* Padding par défaut (PC) */
+}
+
+/* --- 2. WRAPPER (Structure) --- */
+.navbar-wrapper {
+    position: relative; /* Sert de repère pour le burger */
+    width: 100%;
+    /* IMPORTANT : Pas de z-index ici pour ne pas piéger le burger */
+}
+
+/* --- 3. BARRE GRISE --- */
+#main-menu { 
+    background: #d9d9d9; 
+    padding: 10px 20px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    border-radius: 8px; 
+    min-height: 60px;
+    position: relative;
+    padding-left: 60px; /* Espace réservé pour le burger */
+    z-index: 10; /* Niveau faible : au-dessus du fond, mais sous l'overlay */
+}
+
+/* --- 4. BURGER (Centrage Automatique & Z-Index critique) --- */
+.burger-icon {
+    width: 30px;
+    height: 20px;
+    
+    /* Position absolue par rapport au .navbar-wrapper */
+    position: absolute;
+    
+    /* Centrage vertical parfait */
+    top: 50%;
+    transform: translateY(-50%);
+    
+    left: 20px; /* Marge gauche */
+    
+    cursor: pointer;
+    z-index: 2001; /* CRUCIAL : Doit être supérieur à l'overlay (1500) */
+}
+
+/* Barres du burger */
+.burger-icon span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: #333;
+    border-radius: 9px;
+    left: 0;
+    transition: .25s ease-in-out;
+}
+
+/* Position initiale des 3 barres */
+.burger-icon span:nth-child(1) { top: 0px; }
+.burger-icon span:nth-child(2) { top: 10px; }
+.burger-icon span:nth-child(3) { top: 20px; }
+
+/* Animation d'ouverture (Transformation en croix) */
+.burger-icon.open span:nth-child(1) { 
+    top: 10px; 
+    transform: rotate(135deg); 
+    background: white; /* Devient blanc sur fond noir */
+}
+.burger-icon.open span:nth-child(2) { 
+    opacity: 0; 
+    left: -60px; 
+}
+.burger-icon.open span:nth-child(3) { 
+    top: 10px; 
+    transform: rotate(-135deg); 
+    background: white; /* Devient blanc sur fond noir */
+}
+
+
+/* --- 5. ÉLÉMENTS DU MENU (Logo, Boutons...) --- */
+.menu-center img {
+    max-height: 50px; 
+    width: auto;
+    display: block;
+}
+
+.menu-right { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+.btn-admin, .countdown-badge { 
+    background: #333; 
+    color: white; 
+    padding: 10px 20px; 
+    border-radius: 20px; 
+    font-weight: bold; 
+    font-size: 14px; 
+    white-space: nowrap; 
+    text-decoration: none;
+}
+
+.qr-container { 
+    background: white; 
+    padding: 5px; 
+    border-radius: 5px; 
+}
+
+/* Compteur Visiteur (Jour J) */
+.visitor-counter {
+    background: #333;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* --- 6. OVERLAY (Menu Plein Écran) --- */
+.menu-overlay {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 1500; /* L'overlay est à 1500, le burger à 2001 -> C'est OK */
+    
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    
+    opacity: 0; 
+    visibility: hidden; 
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.menu-overlay.open { 
+    opacity: 1; 
+    visibility: visible; 
+}
+
+.menu-links { 
+    list-style: none; 
+    padding: 0; 
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+}
+
+.menu-links a { 
+    color: black; 
+    background: #e0e0e0; 
+    padding: 12px 40px; 
+    border-radius: 50px; 
+    text-decoration: none; 
+    font-weight: bold; 
+    font-size: 1.1rem; 
+    display: inline-block; 
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.menu-links a:hover {
+    transform: scale(1.05);
+    background-color: #fff;
+}
+
+
+/* =========================================
+   --- 7. RESPONSIVE (MOBILE & TABLETTE) ---
+   ========================================= */
+
+@media screen and (max-width: 768px) {
+    
+    body {
+        padding: 10px; /* Marges réduites sur mobile */
+    }
+
+    #main-menu {
+        padding: 10px;
+        padding-left: 50px; /* Moins d'espace nécessaire */
+        min-height: 50px;
+    }
+
+    .burger-icon {
+        left: 15px; 
+        width: 25px; /* Burger un peu plus petit */
+    }
+    
+    /* Ajustement des barres pour la petite taille */
+    .burger-icon span { height: 2px; }
+    .burger-icon span:nth-child(2) { top: 8px; }
+    .burger-icon span:nth-child(3) { top: 16px; }
+
+    /* Animation ajustée pour le petit burger */
+    .burger-icon.open span:nth-child(1) { top: 8px; }
+    .burger-icon.open span:nth-child(3) { top: 8px; }
+
+    .menu-center img {
+        max-height: 35px; /* Logo plus petit */
+    }
+
+    .countdown-badge {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    /* Très petits écrans */
+    @media screen and (max-width: 380px) {
+        .countdown-badge {
+            font-size: 10px;
+            padding: 6px 10px;
+        }
+    }
+}
