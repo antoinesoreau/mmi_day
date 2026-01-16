@@ -86,3 +86,6 @@ body {
   flex-direction: column;
   justify-content: space-between;
 }
+.stand-media-item{
+  width: 50%;
+}

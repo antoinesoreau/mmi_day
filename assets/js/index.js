@@ -61,7 +61,7 @@ fetch('controller/accueil.php', {
 
             const video = document.createElement('video');
             video.className = 'stand-video';
-            video.src = stand.url?.trim() || '';
+            video.src = `upload/${stand.url?.trim() || ''}`;
             video.controls = true;
 
             const info = document.createElement('div');
